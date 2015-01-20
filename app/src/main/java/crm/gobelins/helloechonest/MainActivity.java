@@ -6,10 +6,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.echonest.api.v4.Song;
+
 import crm.gobelins.helloechonest.playlist.PlaylistFragment;
 
 
-public class MainActivity extends ActionBarActivity implements PlaylistFragment.OnFragmentInteractionListener {
+public class MainActivity extends ActionBarActivity implements PlaylistFragment.OnSongClickListener {
+
+    private static final String TAG = "MAIN_ACTIVITY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +47,9 @@ public class MainActivity extends ActionBarActivity implements PlaylistFragment.
 
         return super.onOptionsItemSelected(item);
     }
-
+    
     @Override
-    public void onFragmentInteraction(String id) {
-        Log.d("PLAYLIST", id);
+    public void onSongClick(Song song) {
+        Log.d(TAG, song.getTitle());
     }
 }

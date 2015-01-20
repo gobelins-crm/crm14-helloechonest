@@ -30,10 +30,15 @@ public class ApiWrapper {
 
     public Playlist getSimilarArtists(int results, String artist)
             throws EchoNestException {
+
         BasicPlaylistParams params = new BasicPlaylistParams();
+
         params.addArtist(artist);
+        params.addIDSpace("7digital-US");
+        params.includeTracks();
         params.setType(BasicPlaylistParams.PlaylistType.ARTIST_RADIO);
         params.setResults(results);
+
         return mApi.createBasicPlaylist(params);
     }
 

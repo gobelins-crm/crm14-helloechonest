@@ -6,18 +6,19 @@ import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.echonest.api.v4.EchoNestException;
 import com.echonest.api.v4.Playlist;
+import com.echonest.api.v4.Song;
 
-import crm.gobelins.helloechonest.playlist.dummy.DummyContent;
 import crm.gobelins.helloechonest.server.ApiWrapper;
 
 /**
  * A fragment representing a list of Items.
  * <p/>
  * <p/>
- * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
+ * Activities containing this fragment MUST implement the {@link crm.gobelins.helloechonest.playlist.PlaylistFragment.OnSongClickListener}
  * interface.
  */
 public class PlaylistFragment extends ListFragment {
@@ -29,7 +30,7 @@ public class PlaylistFragment extends ListFragment {
     private int mResults;
     private String mArtist;
 
-    private OnFragmentInteractionListener mListener;
+    private OnSongClickListener mListener;
 
     public static PlaylistFragment newInstance(int results, String artist) {
         PlaylistFragment fragment = new PlaylistFragment();
@@ -77,7 +78,11 @@ public class PlaylistFragment extends ListFragment {
 
             @Override
             protected void onPostExecute(Void aVoid) {
-                adapter.addAll(playlist.getSongs());
+                if(null != playlist) {
+                    adapter.addAll(playlist.getSongs());
+                } else {
+                    Toast.makeText(getActivity(), "API error", Toast.LENGTH_LONG);
+                }
             }
         }
 
@@ -91,10 +96,10 @@ public class PlaylistFragment extends ListFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnFragmentInteractionListener) activity;
+            mListener = (OnSongClickListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnSongClickListener");
         }
     }
 
@@ -109,10 +114,12 @@ public class PlaylistFragment extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
+        Song song = (Song) getListAdapter().getItem(position);
+
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+            mListener.onSongClick(song);
         }
     }
 
@@ -126,9 +133,8 @@ public class PlaylistFragment extends ListFragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(String id);
+    public interface OnSongClickListener {
+        public void onSongClick(Song song);
     }
 
 }
