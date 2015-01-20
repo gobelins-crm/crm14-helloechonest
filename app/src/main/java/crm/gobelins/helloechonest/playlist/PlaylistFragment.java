@@ -1,12 +1,17 @@
 package crm.gobelins.helloechonest.playlist;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.widget.ListView;
 
+import com.echonest.api.v4.EchoNestException;
+import com.echonest.api.v4.Playlist;
+
 import crm.gobelins.helloechonest.playlist.dummy.DummyContent;
+import crm.gobelins.helloechonest.server.ApiWrapper;
 
 /**
  * A fragment representing a list of Items.
@@ -52,16 +57,31 @@ public class PlaylistFragment extends ListFragment {
             mArtist = getArguments().getString(ARG_ARTIST);
         }
 
-        PlaylistAdapter adapter = new PlaylistAdapter(getActivity());
+        final PlaylistAdapter adapter = new PlaylistAdapter(getActivity());
 
-//        try {
-//            adapter.addAll(ApiWrapper.with(getActivity())
-//                    .getSimilarArtists(mResults, mArtist)
-//                    .getSongs()
-//            );
-//        } catch (EchoNestException e) {
-//            e.printStackTrace();
-//        }
+
+        class PlaylistAsyncTask extends AsyncTask<Void, Void, Void> {
+
+            private Playlist playlist;
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    playlist = ApiWrapper.with(getActivity())
+                            .getSimilarArtists(mResults, mArtist);
+                } catch (EchoNestException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                adapter.addAll(playlist.getSongs());
+            }
+        }
+
+        new PlaylistAsyncTask().execute();
 
         setListAdapter(adapter);
     }
