@@ -6,6 +6,7 @@
 
     <TextView
         android:id="@+id/title"
+        android:text="Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dip"
@@ -13,12 +14,15 @@
 
     <TextView
         android:id="@+id/artist"
+        android:text="Artist"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@android:id/text1"
         android:textAppearance="?android:attr/textAppearanceListItem" />
 
     <ImageView
         android:id="@+id/image"
+        android:src="@drawable/ic_launcher"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

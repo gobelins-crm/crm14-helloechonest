@@ -1,5 +1,6 @@
 package crm.gobelins.helloechonest;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -9,11 +10,16 @@ import android.view.MenuItem;
 import com.echonest.api.v4.Song;
 
 import crm.gobelins.helloechonest.playlist.PlaylistFragment;
+import crm.gobelins.helloechonest.server.ApiWrapper;
+import crm.gobelins.helloechonest.song.SongActivity;
 
 
 public class MainActivity extends ActionBarActivity implements PlaylistFragment.OnSongClickListener {
 
     private static final String TAG = "MAIN_ACTIVITY";
+    public static final String TITLE = "TITLE";
+    public static final String ARTIST = "ARTIST";
+    public static final String IMAGE = "IMAGE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,5 +57,13 @@ public class MainActivity extends ActionBarActivity implements PlaylistFragment.
     @Override
     public void onSongClick(Song song) {
         Log.d(TAG, song.getTitle());
+
+        Intent intent = new Intent(this, SongActivity.class);
+
+        intent.putExtra(TITLE, song.getTitle());
+        intent.putExtra(ARTIST, song.getArtistName());
+        intent.putExtra(IMAGE, ApiWrapper.getReleaseImage(song));
+
+        startActivity(intent);
     }
 }

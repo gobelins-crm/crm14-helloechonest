@@ -6,6 +6,7 @@ import com.echonest.api.v4.BasicPlaylistParams;
 import com.echonest.api.v4.EchoNestAPI;
 import com.echonest.api.v4.EchoNestException;
 import com.echonest.api.v4.Playlist;
+import com.echonest.api.v4.Song;
 
 import crm.gobelins.helloechonest.R;
 
@@ -26,6 +27,16 @@ public class ApiWrapper {
             sInstance = new ApiWrapper(context);
         }
         return sInstance;
+    }
+
+    public static String getReleaseImage(Song song) {
+        String imageUrl;
+        try {
+            imageUrl = song.getString("tracks[0].release_image");
+        } catch (IndexOutOfBoundsException e) {
+            imageUrl = null;
+        }
+        return imageUrl;
     }
 
     public Playlist getSimilarArtists(int results, String artist)

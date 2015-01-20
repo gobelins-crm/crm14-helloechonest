@@ -12,6 +12,7 @@ import com.echonest.api.v4.Song;
 import com.squareup.picasso.Picasso;
 
 import crm.gobelins.helloechonest.R;
+import crm.gobelins.helloechonest.server.ApiWrapper;
 
 /**
  * Created by lbeltramo on 19/01/2015.
@@ -42,12 +43,7 @@ public class PlaylistAdapter extends ArrayAdapter<Song> {
         TextView artist = (TextView) view.findViewById(R.id.artist);
         ImageView image = (ImageView) view.findViewById(R.id.image);
 
-        String imageUrl;
-        try {
-            imageUrl = song.getString("tracks[0].release_image");
-        } catch (IndexOutOfBoundsException e) {
-            imageUrl = null;
-        }
+        String imageUrl = ApiWrapper.getReleaseImage(song);
 
         if (imageUrl != null) {
             Picasso.with(getContext())
